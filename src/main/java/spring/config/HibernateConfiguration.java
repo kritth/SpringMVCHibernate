@@ -13,8 +13,6 @@ import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-import common.model.ExampleModel;
-
 @Configuration
 @EnableTransactionManagement
 @ComponentScan({ "spring.config" })
@@ -30,8 +28,8 @@ public class HibernateConfiguration
 	{
 		LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
 		sessionFactory.setDataSource(dataSource());
-		// Manually register model into hibernate
-		sessionFactory.setAnnotatedClasses(ExampleModel.class);
+		// Auto scan the model
+		sessionFactory.setPackagesToScan(new String[] { "common.model" });
 		sessionFactory.setHibernateProperties(hibernateProperties());
 		return sessionFactory;
 	}
