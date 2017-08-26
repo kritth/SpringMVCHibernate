@@ -1,5 +1,6 @@
 package common.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -14,6 +15,7 @@ import common.service.ExampleService;
 @Controller
 public class ExampleController {
 	// Autowired candidate has to always be interface object
+	@Autowired
 	private ExampleService service;
 	
 	public void setService(ExampleService service) {

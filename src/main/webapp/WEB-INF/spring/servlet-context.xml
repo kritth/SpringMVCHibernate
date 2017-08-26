@@ -13,6 +13,9 @@
 	<!-- Handle mapping for static resource efficiently in different scenario for web mvc -->
 	<resources mapping="resources/**" location="/resources/" />
 	
+	<!-- Auto scan context -->
+	<context:component-scan base-package="common.controller, common.dao, common.service" />
+	
 	<!-- View resolver -->
 	<beans:bean
 			class="org.springframework.web.servlet.view.InternalResourceViewResolver">
@@ -35,10 +38,10 @@
 			class = "org.springframework.orm.hibernate5.LocalSessionFactoryBean">
 		<!-- binding data source -->
 		<beans:property name="dataSource" ref="dataSource" />
-		<beans:property name="annotatedClasses">
+		<beans:property name="packagesToScan">
 			<beans:list>
-				<!-- Listing all the model beans here -->
-				<beans:value>common.model.ExampleModel</beans:value>
+				<!-- Listing all the package to scan here -->
+				<beans:value>common.model</beans:value>
 			</beans:list>
 		</beans:property>
 		
@@ -52,24 +55,6 @@
 		</beans:property>
 	</beans:bean> 
 	
-	<!-- Defining our beans here with proper wired candidate -->
-	<beans:bean id="exampleDAO" class="common.dao.ExampleDAOImpl">
-		<!-- name has to match the name of variable in your dao class and ref has to match the
-			session factory bean above -->
-		<beans:property name="sessionFactory" ref="hibernateAnnotatedSessionFactory" />
-	</beans:bean>
-	
-	<beans:bean id="exampleService" class="common.service.ExampleServiceImpl">
-		<!-- name has to match the name of variable in your service class and ref has to match the
-			dao bean above -->
-		<beans:property name="dao" ref="exampleDAO" />
-	</beans:bean>
-	
-	<beans:bean id="exampleController" class="common.controller.ExampleController">
-		<!-- name has to match the name of variable in your controller class and ref has to match the
-			service bean above -->
-		<beans:property name="service" ref="exampleService" />
-	</beans:bean>
 	
 	<!-- Making -->
 	

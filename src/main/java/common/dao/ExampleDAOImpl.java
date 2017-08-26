@@ -5,6 +5,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import common.model.ExampleModel;
@@ -12,6 +13,7 @@ import common.model.ExampleModel;
 @Repository
 public class ExampleDAOImpl implements ExampleDAO {
 	/* Session Factory set up */
+	@Autowired
 	private SessionFactory sessionFactory;
 	
 	public Session getSession() {
