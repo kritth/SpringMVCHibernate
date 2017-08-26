@@ -1,0 +1,11 @@
+@CHARSET "ISO-8859-1";
+form, .table, .table tr {
+	width: 500px;
+	margin: 0 auto;
+}
+input {
+	width: 100%;
+}
+th:first-child, td:first-child {
+	width: 100px;
+}
