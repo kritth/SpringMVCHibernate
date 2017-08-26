@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- This is the schema for all required spring -->
+<beans:beans xmlns="http://www.springframework.org/schema/mvc"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd">
+	<!-- Enable spring annotation driven for web mvc -->
+	<annotation-driven />
+	
+	<!-- Handle mapping for static resource efficiently in different scenario for web mvc -->
+	<resources mapping="resources/**" location="/resources/" />
+	
+	<!-- View resolver -->
+	<beans:bean
+			class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<!-- Defining prefix and suffix for all the file when forwarding the url by the servlet -->
+		<beans:property name="prefix" value="/WEB-INF/views/" />
+		<beans:property name="suffix" value=".jsp" />
+	</beans:bean>
+	
+	<!-- Data source definition for the jdbc connection -->
+	<beans:bean id="dataSource"
+			class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+		<beans:property name="driverClassName" value="com.mysql.cj.jdbc.Driver" />
+		<beans:property name="url" value="jdbc:mysql://localhost:3306/TestDB?autoReconnect=true&amp;useSSL=false" />
+		<beans:property name="username" value="root" />
+		<beans:property name="password" value="admin" />
+	</beans:bean>
+	
+	<!-- Create bean for session factory -->
+	<beans:bean id="hibernateAnnotatedSessionFactory"
+			class = "org.springframework.orm.hibernate5.LocalSessionFactoryBean">
+		<!-- binding data source -->
+		<beans:property name="dataSource" ref="dataSource" />
+		<beans:property name="annotatedClasses">
+			<beans:list>
+				<!-- Listing all the model beans here -->
+				<beans:value>common.model.ExampleModel</beans:value>
+			</beans:list>
+		</beans:property>
+		
+		<!-- Setting hibernate property -->
+		<beans:property name="hibernateProperties">
+			<beans:props>
+				<beans:prop key="hibernate.dialect">org.hibernate.dialect.MySQL5Dialect</beans:prop>
+				<beans:prop key="hibernate.show_sql">true</beans:prop>
+				<beans:prop key="hibernate.hbm2ddl.auto">create</beans:prop>
+			</beans:props>
+		</beans:property>
+	</beans:bean> 
+	
+	<!-- Defining our beans here with proper wired candidate -->
+	<beans:bean id="exampleDAO" class="common.dao.ExampleDAOImpl">
+		<!-- name has to match the name of variable in your dao class and ref has to match the
+			session factory bean above -->
+		<beans:property name="sessionFactory" ref="hibernateAnnotatedSessionFactory" />
+	</beans:bean>
+	
+	<beans:bean id="exampleService" class="common.service.ExampleServiceImpl">
+		<!-- name has to match the name of variable in your service class and ref has to match the
+			dao bean above -->
+		<beans:property name="dao" ref="exampleDAO" />
+	</beans:bean>
+	
+	<beans:bean id="exampleController" class="common.controller.ExampleController">
+		<!-- name has to match the name of variable in your controller class and ref has to match the
+			service bean above -->
+		<beans:property name="service" ref="exampleService" />
+	</beans:bean>
+	
+	<!-- Making -->
+	
+	<!-- Create transaction manager -->
+	<tx:annotation-driven transaction-manager="transactionManager" />
+	<beans:bean id="transactionManager"
+			class="org.springframework.orm.hibernate5.HibernateTransactionManager">
+		<beans:property name="sessionFactory" ref="hibernateAnnotatedSessionFactory" />
+	</beans:bean>
+</beans:beans>
