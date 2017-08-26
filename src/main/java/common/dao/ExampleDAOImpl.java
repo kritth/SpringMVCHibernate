@@ -13,7 +13,6 @@ import common.model.ExampleModel;
 @Repository
 public class ExampleDAOImpl implements ExampleDAO {
 	/* Session Factory set up */
-	@Autowired
 	private SessionFactory sessionFactory;
 	
 	public Session getSession() {

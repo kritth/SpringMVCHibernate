@@ -12,7 +12,6 @@ import common.model.ExampleModel;
 @Service
 public class ExampleServiceImpl implements ExampleService {
 	// Autowired candidate has to always be interface object
-	@Autowired
 	private ExampleDAO dao;
 	
 	public void setDao(ExampleDAO dao) {
